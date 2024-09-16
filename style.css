@@ -1,0 +1,448 @@
+@import url('https://fonts.googleapis.com/css2?family=New+Amsterdam&display=swap');
+@import url(https://fonts.googleapis.com/css?family=Inter:100,200,300,regular,500,600,700,800,900,100italic,200italic,300italic,italic,500italic,600italic,700italic,800italic,900italic);
+@import url(https://fonts.googleapis.com/css?family=Plus+Jakarta+Sans:200,300,regular,500,600,700,800,200italic,300italic,italic,500italic,600italic,700italic,800italic);
+
+*{
+    font-family: "plus jakarta sans",sans-serif;
+}
+
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+    scroll-behavior: smooth;
+    background-color: #f4f4f4;
+    color: #333;
+}
+
+body {
+    background: #edebeb;
+}
+
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center; /* Ensure items are vertically centered */
+    background-color: rgba(52, 98, 250, 0.977);
+    padding: 10px 20px;
+    height: 40px;
+}
+
+.navbar-title h1 {
+    color: #f9f9f9;
+    margin: 0;
+}
+
+.navbar-links {
+    display: flex;
+    gap: 15px;
+    align-items: center; /* Align all links including the login button */
+}
+
+.navbar-links a {
+    color: #f7f7f7;
+    text-decoration: none;
+    padding: 8px 16px;
+    border-radius: 4px;
+    transition: background-color 0.3s;
+}
+
+/* Hover effect */
+.navbar-links a:hover {
+    background-color: #2338d1;
+}
+
+.navbar-links a {
+    color: #f7f7f7;
+    text-decoration: none;
+    padding: 8px 16px;
+    border-radius: 4px;
+    transition: background-color 0.3s;
+}
+
+.navbar-links a:hover {
+    background-color: #2338d1;
+}
+
+.dropdown {
+    position: relative;
+    display: inline-block; /* Allows it to be inline with other links */
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    right: 0;
+    background-color: white;
+    min-width: 160px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+    z-index: 1;
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+/* Dropdown links */
+.dropdown-content a {
+    color: #333;
+    padding: 10px 16px;
+    text-decoration: none;
+    display: block;
+    transition: background-color 0.3s;
+}
+
+/* Hover effect for dropdown links */
+.dropdown-content a:hover {
+    background-color: #dbd9d9;
+}
+
+/* Show the dropdown on hover */
+.dropdown:hover .dropdown-content {
+    display: block;
+}
+
+.dropdown .login-button {
+    padding: 8px 16px; /* Match other links' padding */
+    color: #f7f7f7;
+    text-decoration: none;
+    border-radius: 4px;
+    transition: background-color 0.3s;
+}
+
+/* Adjust login button hover effect */
+.dropdown .login-button:hover {
+    background-color: #2338d1;
+}
+.Container {
+    display: flex;
+    justify-content: center;
+    position: relative;
+}
+
+img{
+    display: block;
+    margin: auto;
+}
+
+@keyframes slide1 {
+    0% {
+        transform: translate(-58vw);
+    }
+    50% {
+        transform: translate(40vw);
+    }
+    100% {
+        transform: translate(-58vw);
+    }
+}
+
+@keyframes slide2 {
+    0% {
+        transform: translate(-40vw);
+    }
+    50% {
+        transform: translate(64vw);
+    }
+    100% {
+        transform: translate(-40vw);
+    }
+}
+
+.imgSlider {
+    height: 523px;
+    background: white;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+}
+
+.img1 {
+    height: 823px;
+    transform: translate(-18vw);
+    animation: slide1 10s 7s infinite; /* 5s duration, 2s delay */
+}
+
+.img2 {
+    height: 823px;
+    transform: translate(-7vw);
+    animation: slide2 10s 7s infinite; /* 5s duration, 2s delay */
+}
+
+.img3{
+    height: 823px;
+    transform: translate(8vw);
+}
+
+
+.login-button {
+    background-color: #ffc400;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 4px;
+    transition: background-color 0.3s;
+}
+
+.login-button:hover {
+    background-color: #00b32d;
+}
+
+.content {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    height: 100%;
+    text-align: center;
+    color: #f1efef;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+.content h2 {
+    margin: 0;
+    font-size: 48px;
+}
+
+.content p {
+    font-size: 24px;
+    color: #ddd;
+}
+
+.intro, .about, .contact {
+    padding: 40px 20px;
+    max-width: 800px;
+    background: rgba(0, 0, 0, 0.6);
+    border-radius: 10px;
+    margin: 20px;
+}
+
+/* Styles for the Features Section */
+.features {
+    padding: 50px 20px;
+    background-color: #f9f9f9; /* Light background for contrast */
+    text-align: center;
+}
+
+.features h2 {
+    font-size: 2.5rem;
+    margin-bottom: 20px;
+    font-weight: 700;
+    color: #333; /* Dark color for the heading */
+}
+
+.features ul {
+    list-style: none; /* Remove bullet points */
+    padding: 0;
+    max-width: 800px;
+    margin: 0 auto; /* Center the list */
+    text-align: left; /* Align text to the left */
+}
+
+.features ul li {
+    font-size: 1.2rem;
+    margin: 10px 0;
+    padding: 10px;
+    background-color: #fff; /* White background for each item */
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); /* Soft shadow for depth */
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+}
+
+.features ul li::before {
+    content: '✓'; /* Checkmark symbol */
+    color: #4CAF50; /* Green color for the checkmark */
+    font-weight: bold;
+    margin-right: 10px;
+    font-size: 1.4rem;
+}
+
+
+
+        /* Hero Section */
+        .hero {
+            background: url('your-hero-image.jpg') no-repeat center center/cover;
+            color: white;
+            text-align: center;
+            padding: 150px 20px;
+            position: relative;
+        }
+
+        .hero h1 {
+            font-size: 48px;
+            margin-bottom: 20px;
+            color: #000;
+        }
+
+        .hero p {
+            font-size: 20px;
+            max-width: 800px;
+            margin: 0 auto 40px;
+            color:#000  
+        }
+
+        
+        
+
+        
+        /* Testimonials Section */
+        .testimonials {
+            padding: 60px 20px;
+            background-color: #f4f4f4;
+            text-align: center;
+        }
+
+        .testimonials h2 {
+            font-size: 36px;
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        .testimonials .testimonial-item {
+            display: inline-block;
+            width: 300px;
+            padding: 20px;
+            margin: 10px;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        .testimonials .testimonial-item img {
+            width: 80px;
+            border-radius: 50%;
+            margin-bottom: 15px;
+        }
+
+        .testimonials .testimonial-item p {
+            font-size: 16px;
+            color: #555;
+        }
+
+        /* Contact Section */
+        .contact {
+            padding: 60px 20px;
+            text-align: center;
+            background-color: #fff;
+            max-width: 800px; /* Set a max width for the section */
+            margin: 0 auto; /* Center the section horizontally */
+            border-radius: 8px; /* Optional: add rounded corners for a better look */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Optional: add a subtle shadow */
+        }
+        
+
+        .contact h2 {
+            font-size: 36px;
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        .contact p {
+            font-size: 18px;
+            max-width: 800px;
+            margin: 0 auto 20px;
+            color: #555;
+        }
+
+        .contact ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .contact ul li {
+            font-size: 18px;
+            color: #555;
+            margin: 10px 0;
+        }
+
+        .contact ul li a {
+            color: #ff9900;
+            text-decoration: none;
+        }
+
+        /* Footer */
+        .footer {
+            padding: 20px;
+            text-align: center;
+            background-color: #000000;
+            color: white;
+        }
+
+        .footer p {
+            margin: 0;
+            font-size: 14px;
+        }
+
+
+        /* Conversion Tools Section */
+        .conversion-tools {
+            display: flex;
+            justify-content: space-around;
+            padding: 60px 20px;
+            background-color: #ffffff;
+            flex-wrap: wrap; /* Allows items to wrap on smaller screens */
+        }
+        
+        .conversion-tools a {
+            background-color: #c0bfbf;
+        }
+        
+        .conversion-item {
+            display: block;
+            text-align: center;
+            width: 45%; /* Default width for larger screens */
+            background-color: #fff;
+            padding: 10px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            text-decoration: none;
+            color: #333;
+            transition: transform 0.3s, box-shadow 0.3s;
+            margin-bottom: 20px; /* Adds space between items */
+        }
+        
+        .conversion-item:hover {
+            transform: scale(1.05);
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+        }
+        
+        .conversion-item img {
+            max-width: 100%;
+            border-radius: 10px;
+            margin-bottom: 5px;
+        }
+        
+        .conversion-item h3 {
+            font-size: 24px;
+            margin-bottom: 10px;
+            color: #000000;
+        }
+
+        .center-container {
+            display: flex; /* Use flexbox */
+            justify-content: center; /* Center horizontally */
+            margin-top: 20px; /* Add some top margin */
+        }
+        
+        h2 {
+            text-align: center; /* Center the heading */
+            margin-bottom: 20px; /* Add some space below the heading */
+        }
+        
+        .center-container {
+            display: flex; /* Use flexbox */
+            justify-content: center; /* Center horizontally */
+            margin-top: 20px; /* Add some top margin */
+        }
+        
+       
+        
+        
+        /* Media Query for screens less than 768px wide (Tablets and Mobile devices) */
+        @media screen and (max-width: 768px) {
+            .conversion-item {
+                width: 100%; /* Full width on smaller screens */
+            }
+        }
+        
