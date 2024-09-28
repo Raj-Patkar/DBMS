@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style_prescription.css">
+    <title>Prescribe Medication</title>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="navbar-title">
+            <h1>Hospital</h1>
+        </div>
+        <div class="navbar-links">
+            <a href="index.html">Logout</a>
+            <a href="#about">About</a>
+            <a href="#contact">Contact Us</a>
+            <a href="#profile"><i class="fas fa-user"></i></a>
+        </div>
+    </nav>
+
+    <div class="container">
+        <h1>Consult </h1>
+        
+        
+
+        
+        <form action="/generate-bill" method="post">
+            <div class="form-group">
+                <label for="patient-name">Bill ID:</label>
+                <input type="text" id="patient-name" name="patient-name" required>
+            </div>
+            <div class="form-group">
+                <label for="bill-description">Description: (Medicines,Instructions,dosage)</label>
+                <input type="text" id="bill-description" name="bill-description" required>
+            </div>
+            <div class="form-group">
+                <label for="amount">Amount (₹):</label>
+                <input type="number" id="amount" name="amount" required>
+            </div>
+            <div class="form-group">
+                <button type="submit">Submit Prescription </button>
+            </div>
+        </form>
+    </div>
+</body>
+</html>
