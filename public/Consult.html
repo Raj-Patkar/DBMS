@@ -1,11 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="style_prescription.css">
     <title>Prescribe Medication</title>
 </head>
+
 <body>
     <nav class="navbar">
         <div class="navbar-title">
@@ -21,10 +23,10 @@
 
     <div class="container">
         <h1>Consult </h1>
-        
-        
 
-        
+
+
+
         <form action="/generate-bill" method="post">
             <div class="form-group">
                 <label for="patient-name">Bill ID:</label>
@@ -43,5 +45,27 @@
             </div>
         </form>
     </div>
+    <div class="container">
+        <h1>Admit Patient </h1>
+        <div class="form-group">
+            <label for="disease">Disease:</label>
+            <input type="text" id="disease" name="disease" required>
+        </div>
+        <div class="form-group">
+            <label for="nurse-name">Assigned Nurse:</label>
+            <input type="text" id="nurse-name" name="nurse-name" required>
+        </div>
+        <div class="form-group">
+            <label for="ward-number">Ward Number:</label>
+            <input type="text" id="ward-number" name="ward-number" required>
+        </div>
+        <div class="form-group">
+            <button type="submit"> Admit Patient</button>
+        </div>
+        </form>
+    </div>
+    </div>
+
 </body>
+
 </html>
