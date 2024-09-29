@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register</title>
+    
+    <link rel="stylesheet" href="Login.css">
+</head>
+<body>
+    <div class="wrapper-class">
+        
+        <form action="/register" method="POST">
+            <div class="inputbox">
+                <input type="text" name="fullname" placeholder="Full Name" required>
+            </div>
+            <div class="inputbox">
+                <input type="email" name="email" placeholder="Email" required>
+            </div>
+            <div class="inputbox">
+                <input type="text" name="username" placeholder="Username" required>
+            </div>
+            <div class="inputbox">
+                <input type="password" name="password" placeholder="Password" required>
+            </div>
+            <div class="inputbox">
+                <!-- Choose role -->
+                <select name="role" required>
+                    <option value="">Select Role</option>
+                    <option value="doctor">Doctor</option>
+                    <option value="patient">Patient</option>
+                </select>
+            </div>
+            <div class="register-actions">
+                <button type="submit" class="loginp">Register</button>
+            </div>
+        </form>
+        
+
+    </div>
+</body>
+</html>
