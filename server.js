@@ -24,7 +24,7 @@ app.use(session({
 const db = mysql.createConnection({
     host: 'localhost',
     user: 'root',
-    password: 'tanisha#555',      // Your MySQL root password
+    password: 'Rbsangeeta56',      // Your MySQL root password
     database: 'hospital_db'  // Your database name
 });
 
@@ -123,7 +123,7 @@ app.post('/register', (req, res) => {
     const query = 'INSERT INTO users (fullname, email, username, password, role) VALUES (?, ?, ?, ?, ?)';
     db.query(query, [fullname, email, username, hashedPassword, role], (err, result) => {
         if (err) throw err;
-        return res.send('User registered successfully');
+        return res.redirect('/index.html');
     });
 });
 
