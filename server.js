@@ -52,7 +52,8 @@ app.post('/patient-login', (req, res) => {
         if (results.length > 0) {
             const user = results[0];
             if (bcrypt.compareSync(password, user.password)) {
-                return res.send('Patient login successful');
+                // Redirect to patient.html on successful login
+                return res.redirect('/patient.html');
             } else {
                 return res.send('Invalid password');
             }
@@ -73,7 +74,8 @@ app.post('/doctor-login', (req, res) => {
         if (results.length > 0) {
             const user = results[0];
             if (bcrypt.compareSync(password, user.password)) {
-                return res.send('Doctor login successful');
+                // Redirect to doctor.html on successful login
+                return res.redirect('/doctor.html');
             } else {
                 return res.send('Invalid password');
             }
@@ -82,6 +84,7 @@ app.post('/doctor-login', (req, res) => {
         }
     });
 });
+
 
 // Registration route for /register 
 app.post('/register', (req, res) => {
@@ -98,6 +101,21 @@ app.post('/register', (req, res) => {
     db.query(query, [fullname, email, username, hashedPassword, role], (err, result) => {
         if (err) throw err;
         return res.send('User registered successfully');
+    });
+});
+
+
+
+// Appointment booking route
+app.post('/submit-appointment', (req, res) => {
+    const { name, email, phone, date, time, doctor } = req.body;
+
+    const query = 'INSERT INTO appointments (full_name, email, phone_number, appointment_date, appointment_time, doctor) VALUES (?, ?, ?, ?, ?, ?)';
+    
+    db.query(query, [name, email, phone, date, time, doctor], (err, result) => {
+        if (err) throw err;
+        console.log('Appointment booked successfully');
+        res.send('Appointment booked successfully');
     });
 });
 
