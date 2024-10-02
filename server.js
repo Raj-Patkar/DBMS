@@ -3,6 +3,7 @@ const mysql = require('mysql');
 const bcrypt = require('bcryptjs');
 const bodyParser = require('body-parser');
 const path = require('path');
+const session = require('express-session');  // Import session middleware
 
 const app = express();
 const port = 3000;
@@ -12,11 +13,18 @@ app.use(bodyParser.urlencoded({ extended: true }));
 // Serve static files (CSS, images, etc.)
 app.use(express.static('public'));
 
+// Configure session middleware (Move this to the top before your routes)
+app.use(session({
+    secret: 'your_secret_key', // Use a secure key for production
+    resave: false,
+    saveUninitialized: true
+}));
+
 // Create a connection to MySQL
 const db = mysql.createConnection({
     host: 'localhost',
     user: 'root',
-    password: 'Rbsangeeta56',      // Your MySQL root password
+    password: 'tanisha#555',      // Your MySQL root password
     database: 'hospital_db'  // Your database name
 });
 
@@ -74,7 +82,7 @@ app.post('/doctor-login', (req, res) => {
         if (results.length > 0) {
             const user = results[0];
             if (bcrypt.compareSync(password, user.password)) {
-                // Redirect to doctor.html on successful login
+                req.session.username = user.username; // Store username in session
                 return res.redirect('/doctor.html');
             } else {
                 return res.send('Invalid password');
@@ -82,6 +90,21 @@ app.post('/doctor-login', (req, res) => {
         } else {
             return res.send('User not found');
         }
+    });
+});
+
+// Fetch appointments for the logged-in doctor
+app.get('/doctor-appointments', (req, res) => {
+    if (!req.session.username) {
+        return res.status(403).send('Unauthorized');
+    }
+
+    const doctorUsername = req.session.username;
+    const query = 'SELECT * FROM appointments WHERE doctor = ? ORDER BY appointment_date, appointment_time';
+    
+    db.query(query, [doctorUsername], (err, results) => {
+        if (err) throw err;
+        res.json(results); // Send appointments as JSON
     });
 });
 
@@ -104,8 +127,6 @@ app.post('/register', (req, res) => {
     });
 });
 
-
-
 // Appointment booking route
 app.post('/submit-appointment', (req, res) => {
     const { name, email, phone, date, time, doctor } = req.body;
@@ -119,6 +140,14 @@ app.post('/submit-appointment', (req, res) => {
     });
 });
 
+// Fetch list of doctors for the appointment form
+app.get('/doctors', (req, res) => {
+    const query = 'SELECT username, fullname FROM users WHERE role = "doctor"';
+    db.query(query, (err, results) => {
+        if (err) throw err;
+        res.json(results); // Send list of doctors as JSON
+    });
+});
 
 // Start the server
 app.listen(port, () => {
