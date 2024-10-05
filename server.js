@@ -24,7 +24,7 @@ app.use(session({
 const db = mysql.createConnection({
     host: 'localhost',
     user: 'root',
-    password: 'tanisha#555',      // Your MySQL root password
+    password: 'Rbsangeeta56',      // Your MySQL root password
     database: 'hospital_db'  // Your database name
 });
 
