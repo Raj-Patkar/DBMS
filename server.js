@@ -24,7 +24,7 @@ app.use(session({
 const db = mysql.createConnection({
     host: 'localhost',
     user: 'root',
-    password: 'Rbsangeeta56',      // Your MySQL root password
+    password: 'tanisha#555',      // Your MySQL root password
     database: 'hospital_db'  // Your database name
 });
 
@@ -131,14 +131,57 @@ app.post('/register', (req, res) => {
 app.post('/submit-appointment', (req, res) => {
     const { name, email, phone, date, time, doctor } = req.body;
 
-    const query = 'INSERT INTO appointments (full_name, email, phone_number, appointment_date, appointment_time, doctor) VALUES (?, ?, ?, ?, ?, ?)';
+    // Insert into the appointments table
+    const appointmentQuery = 'INSERT INTO appointments (full_name, email, phone_number, appointment_date, appointment_time, doctor) VALUES (?, ?, ?, ?, ?, ?)';
     
-    db.query(query, [name, email, phone, date, time, doctor], (err, result) => {
+    db.query(appointmentQuery, [name, email, phone, date, time, doctor], (err, result) => {
         if (err) throw err;
-        console.log('Appointment booked successfully');
-        res.send('Appointment booked successfully');
+        
+        const appointmentId = result.insertId; // Capture the inserted appointment ID
+
+        // Now insert into the bill table
+        const billQuery = 'INSERT INTO bill (appointment_id, patient_name, doctor_name, appointment_date, appointment_time, amount) VALUES (?, ?, ?, ?, ?, ?)';
+        const fees = 500;  // Static fee for appointment
+
+        db.query(billQuery, [appointmentId, name, doctor, date, time, fees], (err, billResult) => {
+            if (err) throw err;
+
+            // Store appointment and bill details in session
+            req.session.appointmentDetails = {
+                name,
+                email,
+                phone,
+                date,
+                time,
+                doctor,
+                billId: billResult.insertId,  // Use bill ID from the inserted row in the bill table
+                fees: fees
+            };
+
+            return res.redirect('/ConfirmBooking.html');
+        });
     });
 });
+
+
+// Route to serve the confirmation page
+app.get('/confirm-booking', (req, res) => {
+    if (!req.session.appointmentDetails) {
+        return res.redirect('/'); // Redirect to home if no appointment details
+    }
+    res.sendFile(path.join(__dirname, 'public', 'ConfirmBooking.html'));
+});
+
+// Fetch appointment details for confirmation
+app.get('/get-confirmation-details', (req, res) => {
+    if (!req.session.appointmentDetails) {
+        return res.status(403).send('Unauthorized');
+    }
+    
+    // Send session data including bill ID and fees
+    res.json(req.session.appointmentDetails);
+});
+
 
 // Fetch list of doctors for the appointment form
 app.get('/doctors', (req, res) => {
