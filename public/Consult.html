@@ -6,6 +6,57 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="style_prescription.css">
     <title>Prescribe Medication</title>
+    <style>
+       
+    </style>
+
+    <script>
+        function toggleAdmitDetails() {
+            const admitCheckbox = document.getElementById("admit-patient");
+            const admitDetails = document.getElementById("admit-details");
+            admitDetails.style.display = admitCheckbox.checked ? "block" : "none";
+        }
+
+        // Function to dynamically add medicine fields
+        function addMedicine() {
+            const medicinesContainer = document.getElementById("medicines-container");
+            const medicineEntry = document.createElement("div");
+            medicineEntry.classList.add("medicine-entry");
+
+            medicineEntry.innerHTML = `
+                <div class="form-group">
+                    <label for="medicine-name">Medicine Name:</label>
+                    <input type="text" name="medicine-name[]" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="dosage">Dosage (e.g., 500mg):</label>
+                    <input type="text" name="dosage[]" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="frequency">Frequency (e.g., 2 times/day):</label>
+                    <input type="text" name="frequency[]" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="duration">Duration (e.g., 7 days):</label>
+                    <input type="text" name="duration[]" required>
+                </div>
+
+                <button type="button" class="remove-button" onclick="removeMedicine(this)">Remove</button>
+                <hr>
+            `;
+
+            medicinesContainer.appendChild(medicineEntry);
+        }
+
+        // Function to remove medicine fields
+        function removeMedicine(button) {
+            const medicineEntry = button.parentNode;
+            medicineEntry.remove();
+        }
+    </script>
 </head>
 
 <body>
@@ -23,80 +74,88 @@
 
     <div class="container">
         <h1>Consultation Bill & Prescription</h1>
-    
+
         <form action="/generate-bill" method="post">
+            <!-- Prescription and Billing Section -->
             <div class="form-group">
                 <label for="bill-id">Bill ID:</label>
                 <input type="text" id="bill-id" name="bill-id" required>
             </div>
-    
+
             <div class="form-group">
                 <label for="patient-name">Patient Name:</label>
                 <input type="text" id="patient-name" name="patient-name" required>
             </div>
-    
-            <!-- Medicines Section -->
+
             <h3>Medicines</h3>
-            <div class="form-group">
-                <label for="medicine-name">Medicine Name:</label>
-                <input type="text" id="medicine-name" name="medicine-name" required>
+            <div id="medicines-container">
+                <!-- First medicine entry -->
+                <div class="medicine-entry">
+                    <div class="form-group">
+                        <label for="medicine-name">Medicine Name:</label>
+                        <input type="text" name="medicine-name[]" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="dosage">Dosage (e.g., 500mg):</label>
+                        <input type="text" name="dosage[]" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="frequency">Frequency (e.g., 2 times/day):</label>
+                        <input type="text" name="frequency[]" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="duration">Duration (e.g., 7 days):</label>
+                        <input type="text" name="duration[]" required>
+                    </div>
+                </div>
             </div>
-    
-            <div class="form-group">
-                <label for="dosage">Dosage (e.g., 500mg):</label>
-                <input type="text" id="dosage" name="dosage" required>
-            </div>
-    
-            <div class="form-group">
-                <label for="frequency">Frequency (e.g., 2 times/day):</label>
-                <input type="text" id="frequency" name="frequency" required>
-            </div>
-    
-            <div class="form-group">
-                <label for="duration">Duration (e.g., 7 days):</label>
-                <input type="text" id="duration" name="duration" required>
-            </div>
-    
-            <!-- Additional Instructions -->
-            <div class="form-group">
-                <label for="additional-instructions">Additional Instructions:</label>
-                <textarea id="additional-instructions" name="additional-instructions" rows="3"></textarea>
-            </div>
-    
-            <!-- Amount Section -->
+
+            <!-- Button to add more medicines -->
+            <button type="button" class="add-button" onclick="addMedicine()">Add Medicine</button>
+
+            <!-- Billing Section -->
             <h3>Billing</h3>
             <div class="form-group">
                 <label for="amount">Amount (₹):</label>
                 <input type="number" id="amount" name="amount" required>
             </div>
-    
+
+            <!-- Admit Patient Toggle Switch (same as before) -->
+            <div class="form-group">
+                <label for="admit-patient">Admit Patient:</label>
+                <label class="switch">
+                    <input type="checkbox" id="admit-patient" onclick="toggleAdmitDetails()">
+                    <span class="slider"></span>
+                </label>
+            </div>
+
+            <!-- Admission Details, Hidden Initially -->
+            <div id="admit-details">
+                <h3>Admit Patient</h3>
+                <div class="form-group">
+                    <label for="disease">Disease:</label>
+                    <input type="text" id="disease" name="disease">
+                </div>
+
+                <div class="form-group">
+                    <label for="nurse-name">Assigned Nurse:</label>
+                    <input type="text" id="nurse-name" name="nurse-name">
+                </div>
+
+                <div class="form-group">
+                    <label for="ward-number">Ward Number:</label>
+                    <input type="text" id="ward-number" name="ward-number">
+                </div>
+            </div>
+
             <div class="form-group">
                 <button type="submit">Submit Prescription & Generate Bill</button>
             </div>
         </form>
     </div>
-    
-    <div class="container">
-        <h1>Admit Patient </h1>
-        <div class="form-group">
-            <label for="disease">Disease:</label>
-            <input type="text" id="disease" name="disease" required>
-        </div>
-        <div class="form-group">
-            <label for="nurse-name">Assigned Nurse:</label>
-            <input type="text" id="nurse-name" name="nurse-name" required>
-        </div>
-        <div class="form-group">
-            <label for="ward-number">Ward Number:</label>
-            <input type="text" id="ward-number" name="ward-number" required>
-        </div>
-        <div class="form-group">
-            <button type="submit"> Admit Patient</button>
-        </div>
-        </form>
-    </div>
-    </div>
-
 </body>
 
 </html>
