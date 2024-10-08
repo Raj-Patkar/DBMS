@@ -108,7 +108,6 @@ app.get('/doctor-appointments', (req, res) => {
     });
 });
 
-
 // Registration route for /register 
 app.post('/register', (req, res) => {
     const { fullname, email, username, password, role } = req.body;
@@ -158,11 +157,10 @@ app.post('/submit-appointment', (req, res) => {
                 fees: fees
             };
 
-            return res.redirect('/ConfirmBooking.html');
+            return res.redirect('/confirm-booking');
         });
     });
 });
-
 
 // Route to serve the confirmation page
 app.get('/confirm-booking', (req, res) => {
@@ -182,13 +180,43 @@ app.get('/get-confirmation-details', (req, res) => {
     res.json(req.session.appointmentDetails);
 });
 
-
 // Fetch list of doctors for the appointment form
 app.get('/doctors', (req, res) => {
     const query = 'SELECT username, fullname FROM users WHERE role = "doctor"';
     db.query(query, (err, results) => {
         if (err) throw err;
         res.json(results); // Send list of doctors as JSON
+    });
+});
+
+// Fetch available time slots based on selected doctor and date
+app.get('/available-times', (req, res) => {
+    const doctor = req.query.doctor;
+    const date = req.query.date;
+
+    const startHour = 9; // Clinic starts at 9 AM
+    const endHour = 17; // Clinic ends at 5 PM
+
+    // Fetch all appointments for the doctor on the selected date
+    const query = 'SELECT appointment_time FROM appointments WHERE doctor = ? AND appointment_date = ?';
+    db.query(query, [doctor, date], (err, results) => {
+        if (err) throw err;
+
+        // Extract booked times
+        const bookedTimes = results.map(appointment => appointment.appointment_time);
+
+        // Create available time slots, spaced 30 minutes apart
+        const availableTimes = [];
+        for (let hour = startHour; hour < endHour; hour++) {
+            for (let minute = 0; minute < 60; minute += 30) {
+                const time = `${String(hour).padStart(2, '0')}:${String(minute).padStart(2, '0')}`;
+                if (!bookedTimes.includes(time)) {
+                    availableTimes.push(time);
+                }
+            }
+        }
+
+        res.json(availableTimes);
     });
 });
 
