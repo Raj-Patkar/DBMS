@@ -6,57 +6,55 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="style_prescription.css">
     <title>Prescribe Medication</title>
-    <style>
-       
-    </style>
-
+    
     <script>
         function toggleAdmitDetails() {
             const admitCheckbox = document.getElementById("admit-patient");
             const admitDetails = document.getElementById("admit-details");
             admitDetails.style.display = admitCheckbox.checked ? "block" : "none";
         }
+    //Function to dynamically add medicine fields
 
-        // Function to dynamically add medicine fields
-        function addMedicine() {
-            const medicinesContainer = document.getElementById("medicines-container");
-            const medicineEntry = document.createElement("div");
-            medicineEntry.classList.add("medicine-entry");
+    function addMedicine() {
+        const medicinesContainer = document.getElementById("medicines-container");
+        const medicineEntry = document.createElement("div");
+        medicineEntry.classList.add("medicine-entry");
 
-            medicineEntry.innerHTML = `
-                <div class="form-group">
-                    <label for="medicine-name">Medicine Name:</label>
-                    <input type="text" name="medicine-name[]" required>
-                </div>
+        medicineEntry.innerHTML = `
+            <div class="form-group">
+                <label for="medicine-name">Medicine Name:</label>
+                <input type="text" name="medicine-name[]" required>
+            </div>
 
-                <div class="form-group">
-                    <label for="dosage">Dosage (e.g., 500mg):</label>
-                    <input type="text" name="dosage[]" required>
-                </div>
+            <div class="form-group">
+                <label for="dosage">Dosage (e.g., 500mg):</label>
+                <input type="text" name="dosage[]" required>
+            </div>
 
-                <div class="form-group">
-                    <label for="frequency">Frequency (e.g., 2 times/day):</label>
-                    <input type="text" name="frequency[]" required>
-                </div>
+            <div class="form-group">
+                <label for="frequency">Frequency (e.g., 2 times/day):</label>
+                <input type="text" name="frequency[]" required>
+            </div>
 
-                <div class="form-group">
-                    <label for="duration">Duration (e.g., 7 days):</label>
-                    <input type="text" name="duration[]" required>
-                </div>
+            <div class="form-group">
+                <label for="duration">Duration (e.g., 7 days):</label>
+                <input type="text" name="duration[]" required>
+            </div>
 
-                <button type="button" class="remove-button" onclick="removeMedicine(this)">Remove</button>
-                <hr>
-            `;
+            <button type="button" class="remove-button" onclick="removeMedicine(this)">Remove</button>
+            <hr>
+        `;
 
-            medicinesContainer.appendChild(medicineEntry);
-        }
+        medicinesContainer.appendChild(medicineEntry);
+    }
 
-        // Function to remove medicine fields
-        function removeMedicine(button) {
-            const medicineEntry = button.parentNode;
-            medicineEntry.remove();
-        }
-    </script>
+    // Function to remove medicine fields
+    function removeMedicine(button) {
+        const medicineEntry = button.parentNode;
+        medicineEntry.remove();
+    }
+</script>
+
 </head>
 
 <body>
@@ -75,7 +73,8 @@
     <div class="container">
         <h1>Consultation Bill & Prescription</h1>
 
-        <form action="/generate-bill" method="post">
+        <form action="/submit-prescription" method="post">
+            
             <!-- Prescription and Billing Section -->
             <div class="form-group">
                 <label for="bill-id">Bill ID:</label>
@@ -85,6 +84,11 @@
             <div class="form-group">
                 <label for="patient-name">Patient Name:</label>
                 <input type="text" id="patient-name" name="patient-name" required>
+            </div>
+
+            <div class="form-group">
+                <label for="doctor-name">Doctor Name:</label>
+                <input type="text" id="doctor-name" name="doctor-name" required>
             </div>
 
             <h3>Medicines</h3>
@@ -123,7 +127,7 @@
                 <input type="number" id="amount" name="amount" required>
             </div>
 
-            <!-- Admit Patient Toggle Switch (same as before) -->
+            <!-- Admit Patient Toggle Switch -->
             <div class="form-group">
                 <label for="admit-patient">Admit Patient:</label>
                 <label class="switch">

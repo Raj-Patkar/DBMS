@@ -24,7 +24,7 @@ app.use(session({
 const db = mysql.createConnection({
     host: 'localhost',
     user: 'root',
-    password: 'Rbsangeeta56',      // Your MySQL root password
+    password: 'tanisha#555',      // Your MySQL root password
     database: 'hospital_db'  // Your database name
 });
 
@@ -130,37 +130,78 @@ app.post('/register', (req, res) => {
 app.post('/submit-appointment', (req, res) => {
     const { name, email, phone, date, time, doctor } = req.body;
 
-    // Insert into the appointments table
-    const appointmentQuery = 'INSERT INTO appointments (full_name, email, phone_number, appointment_date, appointment_time, doctor) VALUES (?, ?, ?, ?, ?, ?)';
-    
-    db.query(appointmentQuery, [name, email, phone, date, time, doctor], (err, result) => {
+    // Start transaction to ensure atomicity
+    db.beginTransaction((err) => {
         if (err) throw err;
-        
-        const appointmentId = result.insertId; // Capture the inserted appointment ID
 
-        // Now insert into the bill table
-        const billQuery = 'INSERT INTO bill (appointment_id, patient_name, doctor_name, appointment_date, appointment_time, amount) VALUES (?, ?, ?, ?, ?, ?)';
-        const fees = 500;  // Static fee for appointment
+        // Check if the slot is already booked for the given doctor and date
+        const checkAvailabilityQuery = 'SELECT * FROM appointments WHERE doctor = ? AND appointment_date = ? AND appointment_time = ? FOR UPDATE';
+        db.query(checkAvailabilityQuery, [doctor, date, time], (err, results) => {
+            if (err) {
+                return db.rollback(() => {
+                    throw err;
+                });
+            }
 
-        db.query(billQuery, [appointmentId, name, doctor, date, time, fees], (err, billResult) => {
-            if (err) throw err;
+            if (results.length > 0) {
+                // If the slot is already booked, send an error response and rollback transaction
+                return db.rollback(() => {
+                    return res.send('This time slot is already booked. Please choose another time.');
+                });
+            } else {
+                // Slot is available, proceed with the booking
+                const appointmentQuery = 'INSERT INTO appointments (full_name, email, phone_number, appointment_date, appointment_time, doctor) VALUES (?, ?, ?, ?, ?, ?)';
+                
+                db.query(appointmentQuery, [name, email, phone, date, time, doctor], (err, result) => {
+                    if (err) {
+                        return db.rollback(() => {
+                            throw err;
+                        });
+                    }
 
-            // Store appointment and bill details in session
-            req.session.appointmentDetails = {
-                name,
-                email,
-                phone,
-                date,
-                time,
-                doctor,
-                billId: billResult.insertId,  // Use bill ID from the inserted row in the bill table
-                fees: fees
-            };
+                    const appointmentId = result.insertId; // Capture the inserted appointment ID
 
-            return res.redirect('/confirm-booking');
+                    // Now insert into the bill table
+                    const billQuery = 'INSERT INTO bill (appointment_id, patient_name, doctor_name, appointment_date, appointment_time, amount) VALUES (?, ?, ?, ?, ?, ?)';
+                    const fees = 500;  // Static fee for appointment
+
+                    db.query(billQuery, [appointmentId, name, doctor, date, time, fees], (err, billResult) => {
+                        if (err) {
+                            return db.rollback(() => {
+                                throw err;
+                            });
+                        }
+
+                        // Commit the transaction if all queries succeeded
+                        db.commit((err) => {
+                            if (err) {
+                                return db.rollback(() => {
+                                    throw err;
+                                });
+                            }
+
+                            // Store appointment and bill details in session
+                            req.session.appointmentDetails = {
+                                name,
+                                email,
+                                phone,
+                                date,
+                                time,
+                                doctor,
+                                billId: billResult.insertId,  // Use bill ID from the inserted row in the bill table
+                                fees: fees
+                            };
+
+                            return res.redirect('/confirm-booking');
+                        });
+                    });
+                });
+            }
         });
     });
 });
+
+
 
 // Route to serve the confirmation page
 app.get('/confirm-booking', (req, res) => {
@@ -217,6 +258,29 @@ app.get('/available-times', (req, res) => {
         }
 
         res.json(availableTimes);
+    });
+});
+
+// Prescription submission route
+app.post('/submit-prescription', (req, res) => {
+    const { bill_id, patient_name, doctor_name, medicines, amount, admit_patient, disease, nurse_name, ward_number } = req.body;
+
+    const query = 'UPDATE bill SET amount = ?, disease = ?, nurse_name = ?, ward_number = ? WHERE bill_id = ?';
+    
+    db.query(query, [amount, admit_patient ? disease : null, admit_patient ? nurse_name : null, admit_patient ? ward_number : null, bill_id], (err, result) => {
+        if (err) throw err;
+        res.send('Prescription and bill updated successfully');
+    });
+});
+
+// Fetch bill details
+app.get('/get-bill-details/:appointment_id', (req, res) => {
+    const { appointment_id } = req.params;
+
+    const query = 'SELECT * FROM bill WHERE appointment_id = ?';
+    db.query(query, [appointment_id], (err, results) => {
+        if (err) throw err;
+        res.json(results); // Send bill details
     });
 });
 
