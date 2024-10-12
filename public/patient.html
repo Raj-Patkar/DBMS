@@ -110,39 +110,22 @@
         </form>
     </div>
 
-    <h2>Previous Bookings</h2>
-    <div class="table-container">
-        <table>
-            <thead>
-                <tr>
-                    <th>Appointment ID</th>
-                    <th>Doctor Name</th>
-                    <th>Date</th>
-                    <th>Time</th>
-                </tr>
-            </thead>
-            <tbody id="previous-bookings-body">
-                <tr>
-                    <td>101</td>
-                    <td>John Doe</td>
-                    <td>2024-10-10</td>
-                    <td>10:30 AM</td>
-                </tr>
-                <tr>
-                    <td>101</td>
-                    <td>John Doe</td>
-                    <td>2024-10-10</td>
-                    <td>10:30 AM</td>
-                </tr>
-                <tr>
-                    <td>101</td>
-                    <td>John Doe</td>
-                    <td>2024-10-10</td>
-                    <td>10:30 AM</td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
+    <h2>Your Previous Bookings</h2>
+    <table id="bookingsTable">
+        <thead>
+            <tr>
+                <th>Full Name</th>
+                <th>Email</th>
+                <th>Phone Number</th>
+                <th>Appointment Date</th>
+                <th>Appointment Time</th>
+                <th>Doctor</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+
+   
     <h2>Pending Bills</h2>
     <div class="table-container">
         <table>
@@ -150,7 +133,6 @@
                 <tr>
                     <th>Bill ID</th>
                     <th>Amount (₹)</th>
-                    <th>Due Date</th>
                     <th>Actions</th>
                 </tr>
             </thead>
@@ -161,59 +143,14 @@
     </div>
 
     <script>
-        // Function to load previous bookings
-        function loadPreviousBookings() {
-            fetch('/user/previous-bookings')
-                .then(response => response.json())
-                .then(data => {
-                    const bookingsBody = document.getElementById('previous-bookings-body');
-                    bookingsBody.innerHTML = '';
-
-                    data.forEach(booking => {
-                        const row = document.createElement('tr');
-                        row.innerHTML = `
-                            <td>${booking.id}</td>
-                            <td>${booking.patientName}</td>
-                            <td>${booking.email}</td>
-                            <td>${booking.phoneNumber}</td>
-                            <td>${new Date(booking.appointmentDate).toLocaleDateString()}</td>
-                            <td>${booking.appointmentTime}</td>
-                            <td><button class="actions-btn">View</button></td>
-                        `;
-                        bookingsBody.appendChild(row);
-                    });
-                })
-                .catch(err => console.error('Error fetching previous bookings:', err));
-        }
+        
 
         // Function to load pending bills
         function loadPendingBills() {
-            fetch('/user/pending-bills')
-                .then(response => response.json())
-                .then(data => {
-                    const billsBody = document.getElementById('pending-bills-body');
-                    billsBody.innerHTML = '';
-
-                    data.forEach(bill => {
-                        const row = document.createElement('tr');
-                        row.innerHTML = `
-                            <td>${bill.id}</td>
-                            <td>${bill.patientName}</td>
-                            <td>₹${bill.amount}</td>
-                            <td>${new Date(bill.dueDate).toLocaleDateString()}</td>
-                            <td><button class="actions-btn">Pay</button></td>
-                        `;
-                        billsBody.appendChild(row);
-                    });
-                })
-                .catch(err => console.error('Error fetching pending bills:', err));
+           
         }
 
-        // Load the data when the page is ready
-        document.addEventListener('DOMContentLoaded', () => {
-            loadPreviousBookings();
-            loadPendingBills();
-        });
+        
     </script>
 
 

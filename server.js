@@ -52,6 +52,7 @@ app.get('/login/doctor', (req, res) => {
 // Patient login route
 app.post('/patient-login', (req, res) => {
     const { username, password } = req.body;
+    
 
     const query = 'SELECT * FROM users WHERE username = ? AND role = "patient"';
     db.query(query, [username], (err, results) => {
@@ -60,6 +61,9 @@ app.post('/patient-login', (req, res) => {
         if (results.length > 0) {
             const user = results[0];
             if (bcrypt.compareSync(password, user.password)) {
+                // Store the username in the session
+                req.session.username = user.username;
+
                 // Redirect to patient.html on successful login
                 return res.redirect('/patient.html');
             } else {
@@ -200,6 +204,7 @@ app.post('/submit-appointment', (req, res) => {
         });
     });
 });
+
 
 
 

@@ -95,7 +95,11 @@ h1 {
     text-align: center;
     margin-bottom: 20px;
 }
-
+h2{
+    text-align: center;
+    margin-bottom: 20px;
+    margin-top: 20px;
+}
 table {
     width: 100%;
     border-collapse: collapse;
@@ -147,6 +151,14 @@ table td button:hover {
 
 /* Compact Table Styling */
 .table-container {
+    width: 80%;
+    margin: 20px auto;
+    background-color: #f0f0f0;
+    padding: 15px;
+    border-radius: 10px;
+}
+
+#bookingsTable {
     width: 80%;
     margin: 20px auto;
     background-color: #f0f0f0;
