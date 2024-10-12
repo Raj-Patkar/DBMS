@@ -24,7 +24,7 @@ app.use(session({
 const db = mysql.createConnection({
     host: 'localhost',
     user: 'root',
-    password: 'tanisha#555',      // Your MySQL root password
+    password: 'Rbsangeeta56',      // Your MySQL root password
     database: 'hospital_db'  // Your database name
 });
 
@@ -146,7 +146,7 @@ app.post('/submit-appointment', (req, res) => {
             if (results.length > 0) {
                 // If the slot is already booked, send an error response and rollback transaction
                 return db.rollback(() => {
-                    return res.send('This time slot is already booked. Please choose another time.');
+                    return res.redirect('/AlreadyBook.html');
                 });
             } else {
                 // Slot is available, proceed with the booking
