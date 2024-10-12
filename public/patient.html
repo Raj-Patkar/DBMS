@@ -68,25 +68,25 @@
                         });
                     })
                     .catch(err => console.error('Error fetching doctors:', err));
-
+            
                 document.addEventListener("DOMContentLoaded", function () {
                     // Set today's date as the minimum value for the date picker
                     const today = new Date().toISOString().split('T')[0]; // Get today's date in 'YYYY-MM-DD' format
                     document.getElementById('date').setAttribute('min', today);
                 });
-
+            
                 // Fetch available time slots based on selected doctor and date
-                document.getElementById('doctor').addEventListener('change', function () {
-                    const doctor = this.value;
+                function fetchAvailableTimes() {
+                    const doctor = document.getElementById('doctor').value;
                     const date = document.getElementById('date').value;
-
+            
                     if (doctor && date) {
                         fetch(`/available-times?doctor=${doctor}&date=${date}`)
                             .then(response => response.json())
                             .then(data => {
                                 const timeSelect = document.getElementById('time');
                                 timeSelect.innerHTML = '<option value="" disabled selected>Select a time</option>'; // Reset time options
-
+            
                                 data.forEach(slot => {
                                     const option = document.createElement('option');
                                     option.value = slot; // Use slot as value
@@ -96,8 +96,13 @@
                             })
                             .catch(err => console.error('Error fetching available times:', err));
                     }
-                });
+                }
+            
+                // Trigger fetching available times on doctor and date change
+                document.getElementById('doctor').addEventListener('change', fetchAvailableTimes);
+                document.getElementById('date').addEventListener('change', fetchAvailableTimes);  // Added date change listener
             </script>
+            
 
             <div class="form-group">
                 <button type="submit">Book Appointment</button>
