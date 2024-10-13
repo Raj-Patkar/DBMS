@@ -24,7 +24,7 @@ app.use(session({
 const db = mysql.createConnection({
     host: 'localhost',
     user: 'root',
-    password: 'Rbsangeeta56',      // Your MySQL root password
+    password: 'tanisha#555',      // Your MySQL root password
     database: 'hospital_db'  // Your database name
 });
 
@@ -53,7 +53,6 @@ app.get('/login/doctor', (req, res) => {
 app.post('/patient-login', (req, res) => {
     const { username, password } = req.body;
     
-
     const query = 'SELECT * FROM users WHERE username = ? AND role = "patient"';
     db.query(query, [username], (err, results) => {
         if (err) throw err;
@@ -205,9 +204,6 @@ app.post('/submit-appointment', (req, res) => {
     });
 });
 
-
-
-
 // Route to serve the confirmation page
 app.get('/confirm-booking', (req, res) => {
     if (!req.session.appointmentDetails) {
@@ -268,26 +264,56 @@ app.get('/available-times', (req, res) => {
 
 // Prescription submission route
 app.post('/submit-prescription', (req, res) => {
-    const { bill_id, patient_name, doctor_name, medicines, amount, admit_patient, disease, nurse_name, ward_number } = req.body;
+    const { 
+        bill_id, 
+        patient_name, 
+        doctor_name, 
+        medicine_name, 
+        dosage, 
+        frequency, 
+        duration, 
+        admit_patient, 
+        disease, 
+        nurse_name, 
+        ward_number 
+    } = req.body;
 
-    const query = 'UPDATE bill SET amount = ?, disease = ?, nurse_name = ?, ward_number = ? WHERE bill_id = ?';
-    
-    db.query(query, [amount, admit_patient ? disease : null, admit_patient ? nurse_name : null, admit_patient ? ward_number : null, bill_id], (err, result) => {
-        if (err) throw err;
-        res.send('Prescription and bill updated successfully');
+    // Prepare the base query for prescription insertion
+    let query = 'INSERT INTO prescriptions (bill_id, patient_name, doctor_name, medicine_name, dosage, frequency, duration, disease, nurse_name, ward_number) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
+
+    // Loop through medicine entries to insert them individually
+    const medicines = medicine_name.map((name, index) => {
+        return [
+            bill_id, 
+            patient_name,     // Include patient name
+            doctor_name,      // Include doctor name
+            name, 
+            dosage[index], 
+            frequency[index], 
+            duration[index], 
+            disease, 
+            nurse_name, 
+            ward_number
+        ];
     });
+
+    // If admit_patient is "on", add admission details
+    if (admit_patient === "on") {
+        query = 'INSERT INTO prescriptions (bill_id, patient_name, doctor_name, medicine_name, dosage, frequency, duration, disease, nurse_name, ward_number, admission_status) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
+        medicines.forEach(med => med.push('admitted')); // Add admission status to each entry
+    }
+
+    // Execute the insertion for each medicine entry
+    medicines.forEach(med => {
+        db.query(query, med, (err, result) => {
+            if (err) throw err;
+        });
+    });
+
+    return res.redirect('doctor.html');
 });
 
-// Fetch bill details
-app.get('/get-bill-details/:appointment_id', (req, res) => {
-    const { appointment_id } = req.params;
 
-    const query = 'SELECT * FROM bill WHERE appointment_id = ?';
-    db.query(query, [appointment_id], (err, results) => {
-        if (err) throw err;
-        res.json(results); // Send bill details
-    });
-});
 
 // Start the server
 app.listen(port, () => {
